@@ -6,6 +6,8 @@ import langs from '../langs.js'
 import { bot } from '../app.js'
 
 async function installMusic(msg) {
+    const username = msg.from.first_name
+    const userId = msg.from.id
     const chatId = msg.chat.id
     const logId = '@NK_logMedia'
     const musicName = msg.text.split(' ').slice(1).join(' ')
@@ -59,15 +61,15 @@ async function installMusic(msg) {
                     title: videoTitle
                 }
 
-                const messageText = `${langs.tr.songName} ${audioMetadata.title}\n\n${langs.tr.requestedBy} @${msg.from.first_name || msg.from.username}\n\n${langs.tr.uploadedBy}\n @NK_MediaBot`
+                const messageText = `${langs.tr.songName} ${audioMetadata.title}\n\n${langs.tr.requestedBy} ${msg.from.first_name || msg.from.username} \n\n${langs.tr.uploadedBy} \n@NK_MediaBot`
+
+                const logText = `${langs.tr.songName} ${audioMetadata.title}\n\n${langs.tr.requestedBy} \n[${username}](tg://user?id=${userId})`
 
                 await bot.sendAudio(chatId, fs.createReadStream(filePath), {
                     caption: messageText
                 })
 
-                await bot.sendAudio(logId, fs.createReadStream(filePath), {
-                    caption: messageText
-                })
+                await bot.sendMessage(logId, logText, { parse_mode: "Markdown" })
 
                 fs.unlink(filePath, (err) => {
                     if (err) {
