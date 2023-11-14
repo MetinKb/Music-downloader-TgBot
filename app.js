@@ -24,8 +24,3 @@ bot.onText(/\/install/, installMusic)
 console.log('Bot başlatıldı.')
 
 bot.startPolling()
-
-// bot.onText(/\/info/, async (msg) => {
-//     const languageData = await langControl(msg)
-//     bot.sendMessage(msg.chat.id, languages[languageData].info)
-// })
