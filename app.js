@@ -2,8 +2,6 @@ import { Telegraf } from "telegraf"
 import langs from "./langs.js"
 import dotenv from 'dotenv'
 import installMusic from './Commands/music.js'
-import pin from './Commands/pin.js'
-import unpin from './Commands/unpin.js'
 dotenv.config()
 
 export const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN, { polling: true })
@@ -22,8 +20,6 @@ bot.command('info', (ctx) => {
 })
 
 bot.command('install', installMusic)
-bot.command('pin', pin)
-bot.command('unpin', unpin)
 
 console.log('Bot başlatıldı.')
 bot.launch()
