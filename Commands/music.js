@@ -11,7 +11,7 @@ async function installMusic(ctx) {
     const chatId = ctx.chat.id
     const messageId = ctx.message_id
     const logId = '@NK_logMedia'
-    const musicName = ctx.text.split(' ').slice(1).join(' ')
+    const musicName = ctx.message.text.split(' ').slice(1).join(' ')
 
     if (musicName.length === 0) {
         ctx.reply('Boş girdi alınamaz!', { reply_to_message_id: messageId })
@@ -41,7 +41,7 @@ async function installMusic(ctx) {
 
             const fileName = `${videoTitle}.mp3`
             const filePath = path.join(songFolderPath, fileName)
-
+            console.log(fileName)
             try {
                 await new Promise((resolve, reject) => {
                     ytdl(videoUrl, { filter: 'audioonly' })
@@ -61,9 +61,11 @@ async function installMusic(ctx) {
 
                 const logText = `${langs.tr.songName} ${audioMetadata.title}\n\n${langs.tr.requestedBy} \n[${firstname}](tg://user?id=${userId})\n Id: ${userId}`
 
-                await ctx.replyWithAudio(chatId, fs.createReadStream(filePath), {
-                    caption: messageText,
-                    reply_to_message_id: messageId
+                await ctx.replyWithAudio({
+                    source: fs.createReadStream(filePath),
+                    filename: fileName,
+                }, {
+                    caption: messageText
                 })
 
                 await bot.telegram.sendMessage(logId, logText, { parse_mode: "Markdown" })
