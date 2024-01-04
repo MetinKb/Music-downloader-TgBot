@@ -2,7 +2,6 @@ import ytdl from 'ytdl-core'
 import path from 'path'
 import fs from 'fs'
 import search from 'yt-search'
-import langs from '../langs.js'
 import { bot } from '../app.js'
 
 async function installMusic(ctx) {
@@ -10,7 +9,6 @@ async function installMusic(ctx) {
     const userId = ctx.from.id
     const chatId = ctx.chat.id
     const messageId = ctx.message_id
-    const logId = '@NK_logMedia'
     const musicName = ctx.message.text.split(' ').slice(1).join(' ')
 
     if (musicName.length === 0) {
@@ -57,9 +55,7 @@ async function installMusic(ctx) {
                 })
 
                 const audioMetadata = { title: videoTitle }
-                const messageText = `${langs.tr.songName} ${audioMetadata.title}\n\n${langs.tr.requestedBy} ${firstname || ctx.from.username} \n\n${langs.tr.uploadedBy} \n@NK_MediaBot`
-
-                const logText = `${langs.tr.songName} ${audioMetadata.title}\n\n${langs.tr.requestedBy} \n[${firstname}](tg://user?id=${userId})\n Id: ${userId}`
+                const messageText =  `Music Name: \n ${audioMetadata.title} \n Requested By: ${firstname || ctx.from.username}`
 
                 await ctx.replyWithAudio({
                     source: fs.createReadStream(filePath),
@@ -67,8 +63,6 @@ async function installMusic(ctx) {
                 }, {
                     caption: messageText
                 })
-
-                await bot.telegram.sendMessage(logId, logText, { parse_mode: "Markdown" })
 
                 fs.unlink(filePath, (err) => {
                     if (err) console.error('Dosya silinirken hata oluştu:', err)
